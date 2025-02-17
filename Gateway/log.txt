@@ -1,0 +1,103 @@
+2025-02-13 12:43:33.038 +00:00 [INF] Now listening on: http://[::]:8080
+2025-02-13 12:43:33.062 +00:00 [INF] Now listening on: https://[::]:8081
+2025-02-13 12:43:33.067 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-02-13 12:43:33.069 +00:00 [INF] Hosting environment: Development
+2025-02-13 12:43:33.070 +00:00 [INF] Content root path: /app
+2025-02-13 12:43:33.538 +00:00 [INF] Request starting HTTP/2 GET https://localhost:32768/swagger/index.html - null null
+2025-02-13 12:43:33.581 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Body was inferred but the method does not allow inferred body parameters.
+Below is the list of parameters that we found: 
+
+Parameter           | Source                        
+---------------------------------------------------------------------------------
+executor            | Services (Inferred)
+mapper              | Services (Inferred)
+logger              | Body (Inferred)
+
+
+Did you mean to register the "Body (Inferred)" parameter(s) as a Service or apply the [FromServices] or [FromBody] attribute?
+
+
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.CreateArguments(ParameterInfo[] parameters, RequestDelegateFactoryContext factoryContext)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.CreateArgumentsAndInferMetadata(MethodInfo methodInfo, RequestDelegateFactoryContext factoryContext)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.InferMetadata(MethodInfo methodInfo, RequestDelegateFactoryOptions options)
+   at Microsoft.AspNetCore.Routing.RouteEndpointDataSource.CreateRouteEndpointBuilder(RouteEntry entry, RoutePattern groupPrefix, IReadOnlyList`1 groupConventions, IReadOnlyList`1 groupFinallyConventions)
+   at Microsoft.AspNetCore.Routing.RouteEndpointDataSource.get_Endpoints()
+   at Microsoft.AspNetCore.Routing.CompositeEndpointDataSource.CreateEndpointsUnsynchronized()
+   at Microsoft.AspNetCore.Routing.CompositeEndpointDataSource.EnsureEndpointsInitialized()
+   at Microsoft.AspNetCore.Routing.CompositeEndpointDataSource.get_Endpoints()
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|10_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-02-13 12:43:33.655 +00:00 [INF] Request finished HTTP/2 GET https://localhost:32768/swagger/index.html - 500 null text/html; charset=utf-8 116.8644ms
+2025-02-13 12:43:33.821 +00:00 [INF] Request starting HTTP/2 GET https://localhost:32768/favicon.ico - null null
+2025-02-13 12:43:33.823 +00:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: Body was inferred but the method does not allow inferred body parameters.
+Below is the list of parameters that we found: 
+
+Parameter           | Source                        
+---------------------------------------------------------------------------------
+executor            | Services (Inferred)
+mapper              | Services (Inferred)
+logger              | Body (Inferred)
+
+
+Did you mean to register the "Body (Inferred)" parameter(s) as a Service or apply the [FromServices] or [FromBody] attribute?
+
+
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.CreateArguments(ParameterInfo[] parameters, RequestDelegateFactoryContext factoryContext)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.CreateArgumentsAndInferMetadata(MethodInfo methodInfo, RequestDelegateFactoryContext factoryContext)
+   at Microsoft.AspNetCore.Http.RequestDelegateFactory.InferMetadata(MethodInfo methodInfo, RequestDelegateFactoryOptions options)
+   at Microsoft.AspNetCore.Routing.RouteEndpointDataSource.CreateRouteEndpointBuilder(RouteEntry entry, RoutePattern groupPrefix, IReadOnlyList`1 groupConventions, IReadOnlyList`1 groupFinallyConventions)
+   at Microsoft.AspNetCore.Routing.RouteEndpointDataSource.get_Endpoints()
+   at Microsoft.AspNetCore.Routing.CompositeEndpointDataSource.CreateEndpointsUnsynchronized()
+   at Microsoft.AspNetCore.Routing.CompositeEndpointDataSource.EnsureEndpointsInitialized()
+   at Microsoft.AspNetCore.Routing.CompositeEndpointDataSource.get_Endpoints()
+   at Microsoft.AspNetCore.Routing.DataSourceDependentCache`1.Initialize()
+   at System.Threading.LazyInitializer.EnsureInitializedCore[T](T& target, Boolean& initialized, Object& syncLock, Func`1 valueFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DataSourceDependentMatcher..ctor(EndpointDataSource dataSource, Lifetime lifetime, Func`1 matcherBuilderFactory)
+   at Microsoft.AspNetCore.Routing.Matching.DfaMatcherFactory.CreateMatcher(EndpointDataSource dataSource)
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.InitializeCoreAsync()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Routing.EndpointRoutingMiddleware.<Invoke>g__AwaitMatcher|10_0(EndpointRoutingMiddleware middleware, HttpContext httpContext, Task`1 matcherTask)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2025-02-13 12:43:33.827 +00:00 [INF] Request finished HTTP/2 GET https://localhost:32768/favicon.ico - 500 null text/plain; charset=utf-8 5.9412ms
+2025-02-13 12:47:17.981 +00:00 [INF] Now listening on: http://[::]:8080
+2025-02-13 12:47:17.999 +00:00 [INF] Now listening on: https://[::]:8081
+2025-02-13 12:47:18.003 +00:00 [INF] Application started. Press Ctrl+C to shut down.
+2025-02-13 12:47:18.004 +00:00 [INF] Hosting environment: Development
+2025-02-13 12:47:18.005 +00:00 [INF] Content root path: /app
+2025-02-13 12:47:18.486 +00:00 [INF] Request starting HTTP/2 GET https://localhost:32768/swagger/index.html - null null
+2025-02-13 12:47:18.717 +00:00 [INF] Request finished HTTP/2 GET https://localhost:32768/swagger/index.html - 200 null text/html;charset=utf-8 234.5165ms
+2025-02-13 12:47:18.912 +00:00 [INF] Request starting HTTP/2 GET https://localhost:32768/swagger/v1/swagger.json - null null
+2025-02-13 12:47:18.935 +00:00 [INF] No action descriptors found. This may indicate an incorrectly configured application or missing application parts. To learn more, visit https://aka.ms/aspnet/mvc/app-parts
+2025-02-13 12:47:18.997 +00:00 [INF] Request finished HTTP/2 GET https://localhost:32768/swagger/v1/swagger.json - 200 null application/json;charset=utf-8 85.7006ms
+2025-02-13 12:47:23.716 +00:00 [INF] Request starting HTTP/2 GET https://localhost:32768/getproductswithoutqueue - null null
+2025-02-13 12:47:23.735 +00:00 [INF] Executing endpoint 'HTTP: GET /getproductswithoutqueue'
+2025-02-13 12:47:23.841 +00:00 [INF] Start processing HTTP request GET https://api.restful-api.dev/objects
+2025-02-13 12:47:23.850 +00:00 [INF] Sending HTTP request GET https://api.restful-api.dev/objects
+2025-02-13 12:47:24.546 +00:00 [INF] Received HTTP response headers after 693.2764ms - 200
+2025-02-13 12:47:24.552 +00:00 [INF] End processing HTTP request after 713.5075ms - 200
+2025-02-13 12:47:24.619 +00:00 [INF] Pobrano dane z zewnętrznego serwisu
+2025-02-13 12:47:24.647 +00:00 [INF] Zmapowano dane
+2025-02-13 12:47:24.651 +00:00 [INF] Setting HTTP status code 200.
+2025-02-13 12:47:24.653 +00:00 [INF] Writing value of type 'Produkt[]' as Json.
+2025-02-13 12:47:24.662 +00:00 [INF] Executed endpoint 'HTTP: GET /getproductswithoutqueue'
+2025-02-13 12:47:24.664 +00:00 [INF] Request finished HTTP/2 GET https://localhost:32768/getproductswithoutqueue - 200 null application/json; charset=utf-8 949.3875ms
+2025-02-13 13:04:58.387 +00:00 [INF] Request starting HTTP/2 GET https://localhost:32768/getproductswithoutqueue - null null
+2025-02-13 13:04:58.389 +00:00 [INF] Executing endpoint 'HTTP: GET /getproductswithoutqueue'
+2025-02-13 13:04:58.393 +00:00 [INF] Start processing HTTP request GET https://api.restful-api.dev/objects
+2025-02-13 13:04:58.394 +00:00 [INF] Sending HTTP request GET https://api.restful-api.dev/objects
+2025-02-13 13:04:59.100 +00:00 [INF] Received HTTP response headers after 705.3156ms - 200
+2025-02-13 13:04:59.104 +00:00 [INF] End processing HTTP request after 710.903ms - 200
+2025-02-13 13:04:59.109 +00:00 [INF] Pobrano dane z zewnętrznego serwisu
+2025-02-13 13:04:59.112 +00:00 [INF] Zmapowano dane
+2025-02-13 13:04:59.113 +00:00 [INF] Setting HTTP status code 200.
+2025-02-13 13:04:59.119 +00:00 [INF] Writing value of type 'Produkt[]' as Json.
+2025-02-13 13:04:59.121 +00:00 [INF] Executed endpoint 'HTTP: GET /getproductswithoutqueue'
+2025-02-13 13:04:59.122 +00:00 [INF] Request finished HTTP/2 GET https://localhost:32768/getproductswithoutqueue - 200 null application/json; charset=utf-8 735.5315ms

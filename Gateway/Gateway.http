@@ -1,0 +1,6 @@
+@Gateway_HostAddress = http://localhost:32770
+
+GET {{Gateway_HostAddress}}/getproductswithoutqueue/
+Accept: application/json
+
+###
