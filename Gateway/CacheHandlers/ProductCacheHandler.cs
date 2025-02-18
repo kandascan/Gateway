@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Gateway.ApplicationCore.DTOs;
 using Gateway.ApplicationCore.Models;
+using Gateway.Enums;
 
 namespace Gateway.CacheHandlers
 {
@@ -9,7 +10,7 @@ namespace Gateway.CacheHandlers
         private readonly ApiRequestQueue _queue;
         private readonly IMapper _mapper;
 
-        public string Type => "product"; // Jawnie określony typ
+        public RequestTypeEnum Type => RequestTypeEnum.Product; // Jawnie określony typ
 
         public ProductCacheHandler(ApiRequestQueue queue, IMapper mapper)
         {

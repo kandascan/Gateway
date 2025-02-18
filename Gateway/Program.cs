@@ -83,7 +83,7 @@ app.MapGet("/getRandomProductRequestToQueue", async (ApiRequestQueue queue, IMap
         return produkt;
     });
 
-    return Results.Ok(new { requestId, type = "product" });
+    return Results.Ok(new { requestId, type = RequestTypeEnum.Product });
 })
             .WithName("getRandomProductRequestToQueue")
             .WithOpenApi();
@@ -95,13 +95,13 @@ app.MapGet("/getPostByIdRequestToQueue", async (ApiRequestQueue queue, IJsonPlac
         return externalData;
     });
 
-    return Results.Ok(new { requestId, type = "post" });
+    return Results.Ok(new { requestId, type = RequestTypeEnum.Post });
 })
             .WithName("getPostByIdRequestToQueue")
             .WithOpenApi();
 
 //Pobranie odpowiedzi z kolejki
-app.MapGet("/getResponsFromCache", async (Guid requestId, string type, CacheService cacheService) =>
+app.MapGet("/getResponsFromCache", async (Guid requestId, RequestTypeEnum type, CacheService cacheService) =>
 {
     var result = await cacheService.GetFromCacheAsync(requestId, type);
 

@@ -1,9 +1,11 @@
-﻿namespace Gateway.CacheHandlers
+﻿using Gateway.Enums;
+
+namespace Gateway.CacheHandlers
 {
     public interface ICacheHandler
     {
         Task<object?> GetDataAsync(Guid requestId);
-        string Type { get; } // Jawnie określony typ
+        RequestTypeEnum Type { get; } // Jawnie określony typ
 
     }
 

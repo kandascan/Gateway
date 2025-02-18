@@ -1,11 +1,12 @@
 ﻿using Gateway.ApplicationCore.JsonPlaceholder;
+using Gateway.Enums;
 
 namespace Gateway.CacheHandlers
 {
     public class PostCacheHandler : ICacheHandler
     {
         private readonly ApiRequestQueue _queue;
-        public string Type => "post"; // Jawnie określony typ
+        public RequestTypeEnum Type => RequestTypeEnum.Post; // Jawnie określony typ
 
         public PostCacheHandler(ApiRequestQueue queue)
         {
