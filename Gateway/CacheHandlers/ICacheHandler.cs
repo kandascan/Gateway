@@ -2,7 +2,7 @@
 {
     public interface ICacheHandler
     {
-        object? GetData(Guid requestId);
+        Task<object?> GetDataAsync(Guid requestId);
         string Type { get; } // Jawnie określony typ
 
     }

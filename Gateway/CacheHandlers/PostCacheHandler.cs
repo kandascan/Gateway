@@ -12,15 +12,10 @@ namespace Gateway.CacheHandlers
             _queue = queue;
         }
 
-        public object? GetData(Guid requestId)
+        public async Task<object?> GetDataAsync(Guid requestId)
         {
-            if (_queue.TryGetResult<PostDto>(requestId, out var data))
-            {
-                // Możesz dodać mapowanie np. do `PostViewModel`
-                return new { requestId, data };
-            }
-
-            return default;
+            var (found, data) = await _queue.TryGetResultAsync<PostDto>(requestId);
+            return found ? new { requestId, data } : default;
         }
     }
 

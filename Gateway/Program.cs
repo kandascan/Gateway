@@ -101,9 +101,9 @@ app.MapGet("/getPostByIdRequestToQueue", async (ApiRequestQueue queue, IJsonPlac
             .WithOpenApi();
 
 //Pobranie odpowiedzi z kolejki
-app.MapGet("/getResponsFromCache", (Guid requestId, string type, CacheService cacheService) =>
+app.MapGet("/getResponsFromCache", async (Guid requestId, string type, CacheService cacheService) =>
 {
-    var result = cacheService.GetFromCache(requestId, type);
+    var result = await cacheService.GetFromCacheAsync(requestId, type);
 
     if(result != null)
     {
@@ -147,15 +147,20 @@ app.MapGet("/getposts", async (ApiRequestQueue queue, IMapper mapper, ILogger<Pr
 app.MapGet("/setproducttoredis", async (RedisCacheService cacheService, IMapper mapper, ILogger<Program> logger, IExternalApi service) =>
 {
     var externalData = await service.GetProductsAsync();
-    Produkt[] mappedData = mapper.Map<Produkt[]>(externalData);
 
     Guid requestId = Guid.NewGuid();
 
     Random rand = new Random();
-    int randomValue = rand.Next(1, mappedData.Count());
-    Produkt produkt = mappedData[randomValue];
+    int randomValue = rand.Next(1, externalData.Count());
+    var produkt = externalData[randomValue];
 
-    await cacheService.SetValueAsync(requestId, produkt);
+    var result = await cacheService.SetValueAsync(requestId, produkt);
+
+    if(!result)
+    {
+        return Results.BadRequest(new { message = "Nie udało się zapisać danych w cache" });
+    }
+
     logger.LogInformation($"Zapisano w Redisie pod kluczem: {requestId}");
 
     return Results.Ok(new {requestId, produkt});
@@ -163,15 +168,15 @@ app.MapGet("/setproducttoredis", async (RedisCacheService cacheService, IMapper 
 .WithName("setproductstoredis")
 .WithOpenApi();
 
-app.MapGet("/getproductfromredis", async (Guid requestId, RedisCacheService cacheService, ILogger<Program> logger) =>
-{
-    Produkt? produkt = await cacheService.GetValueAsync<Produkt>(requestId);
+//app.MapGet("/getproductfromredis", async (Guid requestId, RedisCacheService cacheService, ILogger<Program> logger) =>
+//{
+//    Produkt? produkt = await cacheService.GetValueAsync<Produkt>(requestId);
     
-    logger.LogInformation($"Pobrano obiekt z redisa o kluczu: {requestId}");
-    return Results.Ok(new { requestId, produkt, ResponseTime = DateTime.Now.ToShortTimeString() });
-})
-.WithName("getproductfromredis")
-.WithOpenApi();
+//    logger.LogInformation($"Pobrano obiekt z redisa o kluczu: {requestId}");
+//    return Results.Ok(new { requestId, produkt, ResponseTime = DateTime.Now.ToShortTimeString() });
+//})
+//.WithName("getproductfromredis")
+//.WithOpenApi();
 
 app.MapGet("/getcachestatus", (RedisCacheService cacheService, ILogger<Program> logger) =>
 {

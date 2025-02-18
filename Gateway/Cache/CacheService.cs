@@ -11,11 +11,11 @@ namespace Gateway.Cache
             _cacheHandlers = handlers.ToDictionary(h => h.Type, h => h);
         }
 
-        public object? GetFromCache(Guid requestId, string type)
+        public async Task<object?> GetFromCacheAsync(Guid requestId, string type)
         {
             if (_cacheHandlers.TryGetValue(type, out var handler))
             {
-                return handler.GetData(requestId);
+                return await handler.GetDataAsync(requestId);
             }
 
             return default;

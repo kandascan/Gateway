@@ -1,16 +1,16 @@
-﻿using Gateway.ApplicationCore.Models;
-using System.Collections.Concurrent;
+﻿using Gateway.Cache;
 using System.Threading.Channels;
 
 public class ApiRequestQueue
 {
     private readonly ILogger<ApiRequestQueue> _logger;
     private readonly Channel<IRequestTask> _queue = Channel.CreateUnbounded<IRequestTask>();
-    private readonly ConcurrentDictionary<Guid, object> _cache = new();
+    private readonly RedisCacheService _cacheService;
 
-    public ApiRequestQueue(ILogger<ApiRequestQueue> logger)
+    public ApiRequestQueue(ILogger<ApiRequestQueue> logger, RedisCacheService cacheService)
     {
         _logger = logger;
+        _cacheService = cacheService;
     }
 
     public int Count => _queue.Reader.Count;
@@ -31,53 +31,14 @@ public class ApiRequestQueue
         return await _queue.Reader.ReadAsync(cancellationToken);
     }
 
-    public bool TrySetResult<T>(Guid requestId, T result)
-    {
-        return _cache.TryAdd(requestId, result!);
+    public async Task<bool> TrySetResultAsync<T>(Guid requestId, T result)
+    {        
+        return await _cacheService.SetValueAsync(requestId, result);
     }
 
-    public bool TryGetResult<T>(Guid requestId, out T? result)
+    public async Task<(bool found, T? result)> TryGetResultAsync<T>(Guid requestId)
     {
-        if (_cache.TryGetValue(requestId, out var value) && value is T typedValue)
-        {
-            result = typedValue;
-            return true;
-        }
-
-        result = default;
-        return false;
-    }
-}
-
-// Interfejs bazowy dla generycznych RequestTask
-public interface IRequestTask
-{
-    Guid RequestId { get; }
-    Task Execute(ApiRequestQueue queue);
-}
-
-// Implementacja generycznego zadania
-public class RequestTask<T> : IRequestTask
-{
-    public Guid RequestId { get; }
-    private readonly Func<Task<T>> _request;
-
-    public RequestTask(Guid requestId, Func<Task<T>> request)
-    {
-        RequestId = requestId;
-        _request = request;
-    }
-
-    public async Task Execute(ApiRequestQueue queue)
-    {
-        try
-        {
-            var result = await _request();
-            queue.TrySetResult(RequestId, result);
-        }
-        catch (Exception)
-        {
-            queue.TrySetResult(RequestId, default(T));
-        }
+        var result = await _cacheService.GetValueAsync<T>(requestId);
+        return (result is not null, result);
     }
 }

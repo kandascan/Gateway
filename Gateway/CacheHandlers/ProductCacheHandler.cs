@@ -17,15 +17,14 @@ namespace Gateway.CacheHandlers
             _mapper = mapper;
         }
 
-        public object? GetData(Guid requestId)
+        public async Task<object?> GetDataAsync(Guid requestId)
         {
-            if (_queue.TryGetResult<ProductDto>(requestId, out var data))
+            var (found, data) = await _queue.TryGetResultAsync<ProductDto>(requestId);
+            if (found)
             {
                 var mappedData = _mapper.Map<Produkt>(data);
-
                 return new { requestId, data = mappedData };
             }
-
             return default;
         }
     }
