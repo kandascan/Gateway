@@ -1,4 +1,5 @@
-﻿namespace Gateway.ApplicationCore.Models
+﻿
+namespace Gateway.ApplicationCore.Models
 {
     public class Produkt
     {

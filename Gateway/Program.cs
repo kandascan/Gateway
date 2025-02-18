@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using Gateway.ApplicationCore.DTOs;
+using Gateway.ApplicationCore.JsonPlaceholder;
 using Gateway.ApplicationCore.Models;
 using Gateway.BackgroundWorker;
 using Gateway.Cache;
+using Gateway.CacheHandlers;
 using Gateway.Config;
+using Gateway.Enums;
 using Gateway.Http;
 using Gateway.HttpClients;
 using Gateway.Infrastructure.AutoMapperProfiles;
@@ -34,6 +37,14 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(ConnectionMultiplexer.Conn
 builder.Services.Configure<RedisSettings>(redisConfig);
 builder.Services.AddSingleton<RedisCacheService>();
 
+//Cache Handlers
+builder.Services.AddSingleton<ICacheHandler, ProductCacheHandler>();
+builder.Services.AddSingleton<ICacheHandler, PostCacheHandler>();
+
+//Cache Service
+builder.Services.AddSingleton<CacheService>();
+
+
 builder.Services.AddAutoMapper(typeof(ExternalDataProfile));
 builder.Services.AddSingleton<ApiRequestQueue>();
 builder.Services.AddHostedService<QueueWorker>();
@@ -62,7 +73,7 @@ app.MapHealthChecks("/health", new HealthCheckOptions
 
 
 //Wrzucenie zadania do kolejki
-app.MapGet("/setProductRequestToQueue", async (ApiRequestQueue queue, IMapper mapper, ILogger<Program> logger, IExternalApi service) =>
+app.MapGet("/getRandomProductRequestToQueue", async (ApiRequestQueue queue, IMapper mapper, ILogger<Program> logger, IExternalApi service) =>
 {
     var requestId = queue.Enqueue(async () => {
         var externalData = await service.GetProductsAsync();
@@ -72,27 +83,41 @@ app.MapGet("/setProductRequestToQueue", async (ApiRequestQueue queue, IMapper ma
         return produkt;
     });
 
-    return Results.Ok(new { requestId });
+    return Results.Ok(new { requestId, type = "product" });
 })
-            .WithName("setProductRequestToQueue")
+            .WithName("getRandomProductRequestToQueue")
+            .WithOpenApi();
+
+app.MapGet("/getPostByIdRequestToQueue", async (ApiRequestQueue queue, IJsonPlaceholder service) =>
+{
+    var requestId = queue.Enqueue(async () => {
+        var externalData = await service.GetPostById(2);
+        return externalData;
+    });
+
+    return Results.Ok(new { requestId, type = "post" });
+})
+            .WithName("getPostByIdRequestToQueue")
             .WithOpenApi();
 
 //Pobranie odpowiedzi z kolejki
-app.MapGet("/getResponsFromCache", (Guid requestId, ApiRequestQueue queue, IMapper mapper, ILogger<Program> logger, IExternalApi service) =>
+app.MapGet("/getResponsFromCache", (Guid requestId, string type, CacheService cacheService) =>
 {
-    if (/*type == "products" && */queue.TryGetResult<ProductDto>(requestId, out var products))
+    var result = cacheService.GetFromCache(requestId, type);
+
+    if(result != null)
     {
-        return Results.Ok(new { requestId, data = products });
+        return Results.Ok(new { requestId, result });
     }
-    //else if (type == "users" && _queue.TryGetResult<UserDto[]>(requestId, out var users))
-    //{
-    //    return Results.Ok(new { requestId, data = users });
-    //}
 
     return Results.NotFound(new { message = "Dane jeszcze nie gotowe lub nie istnieją." });
 })
             .WithName("getResponsFromCache")
             .WithOpenApi();
+
+
+
+
 
 
 //Testowe endpointy do sprawdzania zewnetrzego api bez kolejki
@@ -107,7 +132,16 @@ app.MapGet("/getproductswithoutqueue", async (ApiRequestQueue queue, IMapper map
             .WithName("GetProductsWithoutQueue")
             .WithOpenApi();
 
+app.MapGet("/getposts", async (ApiRequestQueue queue, IMapper mapper, ILogger<Program> logger, IJsonPlaceholder service) =>
+{
+    var externalData = await service.GetPosts();
+    logger.LogInformation("Pobrano dane z zewnętrznego serwisu");
 
+
+    return Results.Ok(externalData);
+})
+            .WithName("getposts")
+            .WithOpenApi();
 
 //Testowe endpointy do obsługi cache
 app.MapGet("/setproducttoredis", async (RedisCacheService cacheService, IMapper mapper, ILogger<Program> logger, IExternalApi service) =>

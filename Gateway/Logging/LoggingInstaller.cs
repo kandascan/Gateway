@@ -1,7 +1,4 @@
 ﻿using Serilog;
-using Serilog.Sinks.Elasticsearch;
-using System.Reflection;
-using System;
 
 namespace Gateway.Logging
 {
